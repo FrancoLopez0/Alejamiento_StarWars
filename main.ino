@@ -25,10 +25,11 @@ int aH=880;
 
 float t = 0; //timepo que demora en llegar el eco
 float distancia = 0; //distancia en centimetros
-bool init_val = 0;
 
-float distancia_anterior = 0;
-float delta_var = 2, var = 0;
+float distancia_anterior = 0; 
+float var = 0;       //Variacion de la distancia
+
+float distancia_activacion = 2;//Variacion de distancia en centimetros para activar el buzzer
 
 void setup() {
   Serial.begin(9600);//iniciailzamos la comunicación
@@ -38,7 +39,8 @@ void setup() {
   digitalWrite(Trigger, LOW);//Inicializamos el pin con 0
   digitalWrite(ZumbadorPin, LOW);//Inicializamos el pin con 0
 }
- 
+
+void StarWars(int vel = 0);
  
 void loop()
 {
@@ -50,41 +52,40 @@ void loop()
   t = pulseIn(Echo, HIGH); //obtenemos el ancho del pulso
   distancia = t/59;             //escalamos el tiempo a una distancia en cm
   var = distancia-distancia_anterior;
-  if (var > 0 && var*var >= delta_var){
+  if (var > distancia_activacion){
     Serial.println("Se esta alejando");
     //tone(ZumbadorPin, 1000);
     //delay(1000);
     //noTone(ZumbadorPin);
-    StarWars();
+    StarWars(0);
     delay(500);
 
   }
 
   distancia_anterior = distancia;
-  init_val = true;
   delay(100);          //Hacemos una pausa de 100ms
 }
 
 
-void StarWars(void){
+void StarWars(int vel = 0){
   tone(ZumbadorPin, a, 500);
-    delay(500+50);
-    tone(ZumbadorPin, a, 500);
-    delay(500+50);     
-    tone(ZumbadorPin, a, 500); 
-    delay(500+50);
-    tone(ZumbadorPin, f, 350);  
-    delay(350+50);
-    tone(ZumbadorPin, cH, 150);
-    delay(150+50); 
+  delay(500+vel);
+  tone(ZumbadorPin, a, 500);
+  delay(500+vel);     
+  tone(ZumbadorPin, a, 500); 
+  delay(500+vel);
+  tone(ZumbadorPin, f, 350);  
+  delay(350+vel);
+  tone(ZumbadorPin, cH, 150);
+  delay(150+vel); 
     
-    tone(ZumbadorPin, a, 500);
-    delay(500+50);
-    tone(ZumbadorPin, f, 350);
-    delay(350+50);
-    tone(ZumbadorPin, cH, 150);
-    delay(150+50);
-    tone(ZumbadorPin, a, 1000);   
-    delay(1000+50);
+  tone(ZumbadorPin, a, 500);
+  delay(500+vel);
+  tone(ZumbadorPin, f, 350);
+  delay(350+vel);
+  tone(ZumbadorPin, cH, 150);
+  delay(150+vel);
+  tone(ZumbadorPin, a, 1000);   
+  delay(1000+vel);
     
 }
